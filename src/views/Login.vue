@@ -55,10 +55,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios({
-            url: "http://shaobaitao.cn/bgm_api/index.php",
-            method: "post",
-            // params: {}
+          this.$axios.post('forumAPI/test.php', {
+            name: this.loginForm.userName,
+            pass: this.loginForm.password
           }).then(res => {
             console.log(res)
           })

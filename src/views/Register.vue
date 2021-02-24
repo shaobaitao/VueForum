@@ -68,7 +68,7 @@ export default {
           this.$axios({
             url: "http://shaobaitao.cn/bgm_api/index.php",
             method: "post",
-            // params: {}
+            params: {}
           }).then(res => {
             console.log(res)
           })
