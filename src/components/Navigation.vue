@@ -11,24 +11,42 @@
     <el-menu-item index="2">博客</el-menu-item>
     <el-menu-item index="3">程序员学院</el-menu-item>
     <el-menu-item index="4">下载</el-menu-item>
-    <el-menu-item index="5">论坛</el-menu-item>
+    <el-menu-item index="5">{{ username }}</el-menu-item>
     <el-menu-item index="6">代码</el-menu-item>
-    <el-menu-item index="10" style="float: right">账户管理</el-menu-item>
-    <el-menu-item index="9" style="float: right" @click="toLogin">个人中心</el-menu-item>
-    <el-menu-item index="8" style="float: right">
+    <el-menu-item index="10" style="float: right" v-if="isLogin">账户管理</el-menu-item>
+    <el-menu-item index="9" style="float: right"  v-if="isLogin">个人中心</el-menu-item>
+    <el-menu-item index="8" style="float: right"  v-if="isLogin">
       <el-popover
           placement="bottom"
-          width="400"
+          width="300"
           trigger="hover">
-        <el-table>
-          <el-table-column width="150" property="date" label="日期"></el-table-column>
-          <el-table-column width="100" property="name" label="姓名"></el-table-column>
-          <el-table-column width="300" property="address" label="地址"></el-table-column>
-        </el-table>
+        <el-menu
+            default-active="1"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose">
+
+          <el-menu-item index="1">
+            <i class="el-icon-menu"></i>
+            <span slot="title">导航二</span>
+          </el-menu-item>
+          <el-menu-item index="2" >
+            <i class="el-icon-document"></i>
+            <span slot="title">导航三</span>
+          </el-menu-item>
+          <el-menu-item index="3" @click="logOut">
+            <i class="el-icon-setting"></i>
+            <span slot="title">退出登录</span>
+          </el-menu-item>
+        </el-menu>
         <el-avatar :size="40" slot="reference"></el-avatar>
 
       </el-popover>
     </el-menu-item>
+
+    <el-menu-item index="21" style="float: right" v-if="!isLogin" @click="toLogin">注册</el-menu-item>
+    <el-menu-item index="20" style="float: right" v-if="!isLogin" @click="toLogin">登录</el-menu-item>
+
     <el-menu-item index="7" style="float: right">
       <el-input
           class="searchInput"
@@ -46,24 +64,48 @@ export default {
   data() {
     return {
       activeIndex: '1',
-
+      isLogin: false,
+      username: "",
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    toLogin(){
+    toLogin() {
       this.$router.push('/login')
     },
-    openLink(){
+    logOut(){
+      this.$axios.post("forumAPI/logOut.php")
+      .then(res=>{
+        console.log(res)
+        location.reload()
+      })
+    },
+    openLink() {
       const {href} = this.$router.resolve({
         path: '/login',
         // params: { id: 0 }
       });
       window.open(href, '_blank');
+    },
+    getUserInfo() {
+      this.$axios.post('forumAPI/getUserInfo.php',)
+          .then(res => {
+            this.username = res.data['msg']
+            this.isLogin=res.data['is_login']
+          })
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
     }
 
+  },
+  mounted() {
+    this.getUserInfo()
   }
 }
 </script>
