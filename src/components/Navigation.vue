@@ -44,7 +44,7 @@
       </el-popover>
     </el-menu-item>
 
-    <el-menu-item index="21" style="float: right" v-if="!isLogin" @click="toLogin">注册</el-menu-item>
+    <el-menu-item index="21" style="float: right" v-if="!isLogin" @click="toSignIn">注册</el-menu-item>
     <el-menu-item index="20" style="float: right" v-if="!isLogin" @click="toLogin">登录</el-menu-item>
 
     <el-menu-item index="7" style="float: right">
@@ -74,6 +74,9 @@ export default {
     },
     toLogin() {
       this.$router.push('/login')
+    },
+    toSignIn(){
+      this.$router.push('/register')
     },
     logOut(){
       this.$axios.post("forumAPI/logOut.php")
@@ -125,5 +128,9 @@ export default {
 
 .el-menu.el-menu--horizontal {
   border-bottom: none;
+}
+
+.el-menu-vertical-demo.el-menu{
+  border-right: none;
 }
 </style>

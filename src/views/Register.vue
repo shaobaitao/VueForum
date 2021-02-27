@@ -36,9 +36,7 @@ export default {
   data() {
     return {
       registerForm: {
-        // length[6,20] 数字字母下划线
         userName: '',
-        // length[6,20]
         password: '',
         email: '',
       },
@@ -65,12 +63,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios({
-            url: "http://shaobaitao.cn/bgm_api/index.php",
-            method: "post",
-            params: {}
+          this.$axios.post('forumAPI/register.php', {
+            name: this.registerForm.userName,
+            pass: this.registerForm.password,
+            email: this.registerForm.email
           }).then(res => {
-            console.log(res)
+            if(res.data['code']===200){
+              this.$message.success(res.data['msg']);
+              this.$refs[formName].resetFields();
+            }
+            else {
+              this.$message.error(res.data['msg']);
+            }
           })
         } else {
           console.log('error submit!!');
