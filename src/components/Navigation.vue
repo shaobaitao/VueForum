@@ -93,11 +93,16 @@ export default {
       window.open(href, '_blank');
     },
     getUserInfo() {
-      this.$axios.post('forumAPI/getUserInfo.php',)
-          .then(res => {
-            this.username = res.data['msg']
-            this.isLogin=res.data['is_login']
-          })
+      this.$axios.post('forumAPI/test.php', {
+      }).then(() => {
+
+          this.$axios.post('forumAPI/getUserInfo.php',)
+            .then(res => {
+              this.username = res.data['msg']
+              this.isLogin=res.data['is_login']
+            })
+
+      })
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
