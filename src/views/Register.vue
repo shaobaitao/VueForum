@@ -63,9 +63,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('forumAPI/register.php', {
+          this.$axios.post('forumAPI/test.php', {
             name: this.registerForm.userName,
-            pass: this.registerForm.password,
+            pass: this.$md5(this.registerForm.password),
             email: this.registerForm.email
           }).then(res => {
             if(res.data['code']===200){

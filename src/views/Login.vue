@@ -59,8 +59,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.$md5(this.loginForm.password))
-          this.$axios.post('forumAPI/test.php', {
+          // console.log(this.$md5(this.loginForm.password))
+
+          this.$axios.post('forumAPI/login.php', {
             name: this.loginForm.userName,
             pass: this.$md5(this.loginForm.password),
             isSetCookies: this.loginForm.isSetCookies

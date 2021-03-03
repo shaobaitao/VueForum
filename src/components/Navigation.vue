@@ -93,7 +93,7 @@ export default {
       window.open(href, '_blank');
     },
     getUserInfo() {
-      this.$axios.post('forumAPI/test.php', {
+      this.$axios.post('forumAPI/login.php', {
       }).then(() => {
 
           this.$axios.post('forumAPI/getUserInfo.php',)

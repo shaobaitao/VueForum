@@ -11,21 +11,23 @@
           </el-carousel>
         </div>
 
-        <div class="forumItem" style="height: 350px">
+        <div class="forumItem" >
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>卡片名称</span>
-              <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+              <span>热门帖子</span>
+              <el-button style="float: right; padding: 3px 0" type="text">查看全部</el-button>
             </div>
+            <ForumWindow></ForumWindow>
           </el-card>
         </div>
 
-        <div class="forumItem" style="height: 450px">
+        <div class="forumItem" >
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>卡片名称</span>
-              <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+              <span>最新帖子</span>
+              <el-button style="float: right; padding: 3px 0" type="text">查看全部</el-button>
             </div>
+            <ForumWindow></ForumWindow>
           </el-card>
         </div>
       </el-col>
@@ -64,8 +66,12 @@
 </template>
 
 <script>
+import ForumWindow from "@/components/ForumWindow";
 export default {
-  name: "MainForum"
+  name: "MainForum",
+  components:{
+    ForumWindow,
+  }
 }
 </script>
 
@@ -121,4 +127,9 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+/deep/ .el-card__body{
+  padding: 0;
+}
+
 </style>
