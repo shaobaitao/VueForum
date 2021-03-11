@@ -2,23 +2,24 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
-import Home from '../views/home'
-import Login from '../views/Login'
-import Register from "@/views/Register";
+
 let router = new VueRouter({
     routes:[
         {
             path:'/',
-            component:Home
+            component:()=>import("@/views/home.vue")
         },{
             path:'/home',
-            component:Home
+            component:()=>import("@/views/home.vue")
         },{
             path:'/login',
-            component:Login
+            component:()=>import("@/views/Login.vue")
         },{
             path:'/register',
-            component:Register
+            component:()=>import("@/views/Register.vue")
+        },{
+            path:'/userInfo/:id',
+            component:()=>import("@/views/userInfo.vue")
         }
     ]
 })

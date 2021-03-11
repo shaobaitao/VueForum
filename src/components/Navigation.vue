@@ -15,7 +15,7 @@
     <el-menu-item index="6">代码</el-menu-item>
     <el-menu-item index="10" style="float: right" v-if="isLogin">账户管理</el-menu-item>
     <el-menu-item index="9" style="float: right"  v-if="isLogin">个人中心</el-menu-item>
-    <el-menu-item index="8" style="float: right"  v-if="isLogin">
+    <el-menu-item index="8" style="float: right"  v-if="isLogin"  @click="toUserInfo">
       <el-popover
           placement="bottom"
           width="300"
@@ -39,8 +39,7 @@
             <span slot="title">退出登录</span>
           </el-menu-item>
         </el-menu>
-        <el-avatar :size="40" slot="reference"></el-avatar>
-
+        <el-avatar :size="40" slot="reference" ></el-avatar>
       </el-popover>
     </el-menu-item>
 
@@ -66,6 +65,7 @@ export default {
       activeIndex: '1',
       isLogin: false,
       username: "",
+      userID:0,
     };
   },
   methods: {
@@ -100,6 +100,7 @@ export default {
             .then(res => {
               this.username = res.data['msg']
               this.isLogin=res.data['is_login']
+              this.userID=res.data['id']
             })
 
       })
@@ -109,8 +110,10 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    toUserInfo(){
+      this.$router.push('/userInfo/'+this.userID)
     }
-
   },
   mounted() {
     this.getUserInfo()
