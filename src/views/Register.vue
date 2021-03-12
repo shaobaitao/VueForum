@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import api from '../request/api'
 export default {
   name: "Register",
   data() {
@@ -63,7 +64,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('forumAPI/test.php', {
+          api.register({
             name: this.registerForm.userName,
             pass: this.$md5(this.registerForm.password),
             email: this.registerForm.email

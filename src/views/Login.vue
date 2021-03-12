@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import api from '../request/api'
 export default {
   name: "Login",
   data() {
@@ -61,7 +62,7 @@ export default {
         if (valid) {
           // console.log(this.$md5(this.loginForm.password))
 
-          this.$axios.post('forumAPI/login.php', {
+          api.login({
             name: this.loginForm.userName,
             pass: this.$md5(this.loginForm.password),
             isSetCookies: this.loginForm.isSetCookies

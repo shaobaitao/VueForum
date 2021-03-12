@@ -1,10 +1,10 @@
 <template>
   <div class="userInfo">
     <Navigation></Navigation>
-    <p>{{test}}</p>
+    <p>{{ test }}</p>
     <div class="userInfoMain">
       <el-card shadow="always">
-        <el-form  ref="form" :model="editInfo" label-position="left" label-width="80px">
+        <el-form ref="form" v-if="editInfo.isOwner" :model="editInfo" label-position="left" label-width="80px">
           <el-form-item label="头像" style="height: 200px">
             <v-avatar size="136" style="margin-left: 100px">
               <img
@@ -27,7 +27,8 @@
           </el-form-item>
           <el-form-item label="生日">
             <el-col :span="11">
-              <el-date-picker type="date" placeholder="选择生日" v-model="editInfo.birthday" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择生日" v-model="editInfo.birthday"
+                              style="width: 100%;"></el-date-picker>
             </el-col>
           </el-form-item>
           <el-form-item label="邮箱">
@@ -38,8 +39,35 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="onSubmit">保存</el-button>
+          </el-form-item>
+        </el-form>
+        <el-form ref="form" v-else :model="editInfo" label-position="left" label-width="80px">
+          <el-form-item label="头像" style="height: 200px">
+            <v-avatar size="136" style="margin-left: 100px">
+              <img
+                  :src="editInfo.headPortrait"
+                  alt="John"
+              >
+            </v-avatar>
+          </el-form-item>
+          <el-form-item label="昵称">
+            <el-link :underline="false" type="info">{{editInfo.nickname}}</el-link>
+          </el-form-item>
+          <el-form-item label="简介">
+            <el-link :underline="false" type="info">{{editInfo.introduction}}</el-link>
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-link :underline="false" type="info">{{editInfo.gender}}</el-link>
+          </el-form-item>
+          <el-form-item label="生日">
+            <el-link :underline="false" type="info">{{editInfo.birthday}}</el-link>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-link :underline="false" type="info">{{editInfo.email}}</el-link>
+          </el-form-item>
+          <el-form-item label="所在地">
+            <el-link :underline="false" type="info">{{editInfo.location}}</el-link>
           </el-form-item>
         </el-form>
       </el-card>
@@ -51,6 +79,7 @@
 <script>
 import Navigation from "@/components/Navigation";
 import forumFooter from "@/components/forumFooter";
+import api from '../request/api'
 
 export default {
   name: "userInfo",
@@ -61,33 +90,58 @@ export default {
   data() {
     return {
       info: {
-        nickname:'',
-        gender:'',
-        birthday:'',
-        email:'',
-        headPortrait:'',
-        location:'',
-        introduction:''
+        nickname: '',
+        gender: '',
+        birthday: '',
+        email: '',
+        headPortrait: '',
+        location: '',
+        introduction: ''
       },
       editInfo: {
-        nickname:'shaobaitao',
-        gender:'男',
-        birthday:'2000-11-01',
-        email:'noob@shaobaitao.cn',
-        headPortrait:'https://tvax4.sinaimg.cn/crop.0.0.996.996.180/005tKgYGly8gfaax1g0bfj30ro0rotad.jpg?KID=imgbed,tva&Expires=1615473809&ssig=CjnpaAPm2V',
-        location:'江西南昌',
-        introduction:'哈哈哈哈'
+        userID: 0,
+        isOwner: false,
+        nickname: '',
+        gender: '',
+        birthday: '',
+        email: '',
+        headPortrait: '',
+        location: '',
+        introduction: ''
       },
-      test:''
+      test: ''
     }
   },
-  methods:{
+  methods: {
     onSubmit() {
-      console.log(this.form);
+      api.editUserInfo({
+        editInfo:this.editInfo
+      })
+      .then(res => {
+        if(res.data['code']===200){
+          this.$message.success(res.data['msg'])
+
+        }else{
+          this.$message.error(res.data['msg'])
+        }
+      })
+
+    },
+    getUserInfo() {
+      api.getUserInfo({
+        userID: this.$route.params.id
+      })
+          .then(res => {
+            // console.log(res)
+            // console.log(this.editInfo)
+            this.editInfo = res.data
+          })
+
     }
   },
   mounted() {
-    this.test=this.$route.params.id
+    this.test = this.$route.params.id
+    this.getUserInfo()
   }
 
 }

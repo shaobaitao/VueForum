@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import api from '../request/api'
 export default {
   name: "Navigation",
   data() {
@@ -93,10 +94,9 @@ export default {
       window.open(href, '_blank');
     },
     getUserInfo() {
-      this.$axios.post('forumAPI/login.php', {
+      api.login({
       }).then(() => {
-
-          this.$axios.post('forumAPI/getUserInfo.php',)
+          api.getUserLoginStatus()
             .then(res => {
               this.username = res.data['msg']
               this.isLogin=res.data['is_login']
