@@ -83,7 +83,8 @@ export default {
       this.$axios.post("forumAPI/logOut.php")
       .then(res=>{
         console.log(res)
-        location.reload()
+        // location.reload()
+        this.$router.push('/')
       })
     },
     openLink() {

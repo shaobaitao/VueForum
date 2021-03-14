@@ -1,75 +1,52 @@
 <template>
   <div class="userInfo">
     <Navigation></Navigation>
-    <p>{{ test }}</p>
     <div class="userInfoMain">
       <el-card shadow="always">
-        <el-form ref="form" v-if="editInfo.isOwner" :model="editInfo" label-position="left" label-width="80px">
-          <el-form-item label="头像" style="height: 200px">
+        <el-form status-icon :rules="rules" ref="editInfoForm" :model="editInfo"  class="demo-ruleForm"  label-position="left" label-width="80px">
+          <el-form-item label="头像" prop="headPortrait" style="height: 200px">
             <v-avatar size="136" style="margin-left: 100px">
               <img
                   :src="editInfo.headPortrait"
-                  alt="John"
+                  alt="未填写"
               >
             </v-avatar>
           </el-form-item>
-          <el-form-item label="昵称">
-            <el-input v-model="editInfo.nickname" style="width: 200px;"></el-input>
+          <el-form-item label="昵称" prop="nickname">
+            <el-input v-if="editInfo.isOwner" v-model="editInfo.nickname" style="width: 200px;"></el-input>
+            <el-link  v-else :underline="false" type="info">{{ editInfo.nickname }}</el-link>
           </el-form-item>
-          <el-form-item label="简介">
-            <el-input type="textarea" v-model="editInfo.introduction"></el-input>
+          <el-form-item label="简介" prop="introduction">
+            <el-input v-if="editInfo.isOwner" type="textarea" v-model="editInfo.introduction" :rows="8"></el-input>
+            <el-link v-else :underline="false" type="info">{{ editInfo.introduction }}</el-link>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-select v-model="editInfo.gender" placeholder="请选择性别">
+          <el-form-item label="性别" prop="gender">
+            <el-select v-if="editInfo.isOwner" v-model="editInfo.gender" placeholder="请选择性别">
               <el-option label="男" value="男"></el-option>
               <el-option label="女" value="女"></el-option>
             </el-select>
+            <el-link v-else :underline="false" type="info">{{ editInfo.gender }}</el-link>
           </el-form-item>
-          <el-form-item label="生日">
-            <el-col :span="11">
+          <el-form-item label="生日" prop="birthday">
+            <el-col v-if="editInfo.isOwner" :span="11">
               <el-date-picker type="date" placeholder="选择生日" v-model="editInfo.birthday"
                               style="width: 100%;"></el-date-picker>
             </el-col>
+            <el-link v-else :underline="false" type="info">{{ editInfo.birthday }}</el-link>
           </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="editInfo.email" style="width: 300px;"></el-input>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-if="editInfo.isOwner" v-model="editInfo.email" style="width: 300px;"></el-input>
+            <el-link v-else :underline="false" type="info">{{ editInfo.email }}</el-link>
           </el-form-item>
-          <el-form-item label="所在地">
-            <el-input v-model="editInfo.location" style="width: 300px;"></el-input>
+          <el-form-item label="所在地" prop="location">
+            <el-input v-if="editInfo.isOwner" v-model="editInfo.location" style="width: 300px;"></el-input>
+            <el-link v-else :underline="false" type="info">{{ editInfo.location }}</el-link>
           </el-form-item>
-
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button v-if="editInfo.isOwner" type="primary" @click="submitForm('editInfoForm')" style="color: aliceblue;">保存</el-button>
           </el-form-item>
         </el-form>
-        <el-form ref="form" v-else :model="editInfo" label-position="left" label-width="80px">
-          <el-form-item label="头像" style="height: 200px">
-            <v-avatar size="136" style="margin-left: 100px">
-              <img
-                  :src="editInfo.headPortrait"
-                  alt="John"
-              >
-            </v-avatar>
-          </el-form-item>
-          <el-form-item label="昵称">
-            <el-link :underline="false" type="info">{{editInfo.nickname}}</el-link>
-          </el-form-item>
-          <el-form-item label="简介">
-            <el-link :underline="false" type="info">{{editInfo.introduction}}</el-link>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-link :underline="false" type="info">{{editInfo.gender}}</el-link>
-          </el-form-item>
-          <el-form-item label="生日">
-            <el-link :underline="false" type="info">{{editInfo.birthday}}</el-link>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-link :underline="false" type="info">{{editInfo.email}}</el-link>
-          </el-form-item>
-          <el-form-item label="所在地">
-            <el-link :underline="false" type="info">{{editInfo.location}}</el-link>
-          </el-form-item>
-        </el-form>
+
       </el-card>
     </div>
     <forumFooter></forumFooter>
@@ -109,32 +86,46 @@ export default {
         location: '',
         introduction: ''
       },
+      rules: {
+        nickname: [
+          {max: 20, message: '昵称长度最长20位', trigger: 'blur'},
+          {min: 4, message: '昵称长度最小4位', trigger: 'blur'}
+        ],
+        email: [
+          {pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: '邮箱不符合格式！', trigger: 'blur'},
+        ],
+
+      },
       test: ''
     }
   },
   methods: {
-    onSubmit() {
-      api.editUserInfo({
-        editInfo:this.editInfo
-      })
-      .then(res => {
-        if(res.data['code']===200){
-          this.$message.success(res.data['msg'])
-
-        }else{
-          this.$message.error(res.data['msg'])
-        }
-      })
-
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+            if (valid) {
+              api.editUserInfo({
+                editInfo: this.editInfo
+              })
+                  .then(res => {
+                    if (res.data['code'] === 200) {
+                      this.$message.success(res.data['msg'])
+                      this.getUserInfo()
+                    } else {
+                      this.$message.error(res.data['msg'])
+                    }
+                  })
+            }else {
+              console.log('error submit!!');
+              return false;
+            }
+      });
     },
     getUserInfo() {
       api.getUserInfo({
         userID: this.$route.params.id
       })
           .then(res => {
-            // console.log(res)
-            // console.log(this.editInfo)
-            this.editInfo = res.data
+                    this.editInfo = res.data
           })
 
     }
