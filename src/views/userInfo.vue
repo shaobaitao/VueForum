@@ -5,11 +5,10 @@
       <el-card shadow="always">
         <el-form status-icon :rules="rules" ref="editInfoForm" :model="editInfo"  class="demo-ruleForm"  label-position="left" label-width="80px">
           <el-form-item label="头像" prop="headPortrait" style="height: 200px">
-            <v-avatar size="136" style="margin-left: 100px">
-              <img
-                  :src="editInfo.headPortrait"
-                  alt="未填写"
-              >
+            <v-avatar size="136" style="margin-left: 100px; position: relative" >
+              <img  :class="avatarClass" :src="editInfo.headPortrait" alt="未填写" @click="upLoadAvatar" @mouseenter="avatarClass='hover_avatar'"  @mouseleave="avatarClass='avatar'">
+              <span class="avatar_span" v-show="avatarClass==='hover_avatar'" @click="upLoadAvatar" @mouseenter="avatarClass='hover_avatar'">上传头像</span>
+              <el-input class="avatarInput" type="file" @mouseenter.native="avatarClass='hover_avatar'"></el-input>
             </v-avatar>
           </el-form-item>
           <el-form-item label="昵称" prop="nickname">
@@ -96,6 +95,7 @@ export default {
         ],
 
       },
+      avatarClass:'avatar',
       test: ''
     }
   },
@@ -128,6 +128,11 @@ export default {
                     this.editInfo = res.data
           })
 
+    },
+    upLoadAvatar(){
+      console.log(1)
+
+
     }
   },
   mounted() {
@@ -153,4 +158,33 @@ export default {
   height: 100%;
 }
 
+.avatar{
+  opacity: 1;
+  cursor: pointer;
+}
+
+
+.hover_avatar{
+  filter:brightness(50%);
+  cursor: pointer;
+}
+.avatar_span{
+  position: absolute;
+  color: aliceblue;
+  cursor: pointer;
+}
+.avatarInput{
+  position: absolute;
+  opacity:0;
+  filter:alpha(opacity=0);
+  height: 100px;
+  width: 100px;
+  cursor: pointer;
+
+  z-index: 9;
+}
+/deep/ .el-input__inner{
+  height: 100px;
+  width: 100px;
+}
 </style>
