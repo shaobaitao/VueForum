@@ -4,12 +4,22 @@
     <div class="userInfoMain">
       <el-card shadow="always">
         <el-form status-icon :rules="rules" ref="editInfoForm" :model="editInfo"  class="demo-ruleForm"  label-position="left" label-width="80px">
-          <el-form-item label="头像" prop="headPortrait" style="height: 200px">
-            <v-avatar size="136" style="margin-left: 100px; position: relative" >
-              <img  :class="avatarClass" :src="editInfo.headPortrait" alt="未填写" @click="upLoadAvatar" @mouseenter="avatarClass='hover_avatar'"  @mouseleave="avatarClass='avatar'">
-              <span class="avatar_span" v-show="avatarClass==='hover_avatar'" @click="upLoadAvatar" @mouseenter="avatarClass='hover_avatar'">上传头像</span>
-              <el-input class="avatarInput" type="file" @mouseenter.native="avatarClass='hover_avatar'"></el-input>
+          <el-form-item label="头像" prop="headPortrait" >
+            <v-avatar size="100" >
+              <img  :class="avatarClass" :src="editInfo.headPortrait" alt="未填写" >
             </v-avatar>
+            <el-upload
+                v-if="editInfo.isOwner"
+                class="avatarUploader"
+                drag
+
+                action="http://forum.shaobaitao.cn/forumAPI/uploadAvatar.php"
+                :before-upload="beforeAvatarUpload"
+                multiple>
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
           </el-form-item>
           <el-form-item label="昵称" prop="nickname">
             <el-input v-if="editInfo.isOwner" v-model="editInfo.nickname" style="width: 200px;"></el-input>
@@ -129,10 +139,12 @@ export default {
           })
 
     },
-    upLoadAvatar(){
-      console.log(1)
-
-
+    beforeAvatarUpload(file){
+      const isLt2M = file.size / 1024 / 1024 < 1
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 1MB!')
+      }
+      return isLt2M
     }
   },
   mounted() {
@@ -157,34 +169,10 @@ export default {
   width: 100%;
   height: 100%;
 }
+/deep/ .avatarUploader .el-upload-dragger{
+  display: inline-block;
+  margin-top: 30px;
 
-.avatar{
-  opacity: 1;
-  cursor: pointer;
 }
 
-
-.hover_avatar{
-  filter:brightness(50%);
-  cursor: pointer;
-}
-.avatar_span{
-  position: absolute;
-  color: aliceblue;
-  cursor: pointer;
-}
-.avatarInput{
-  position: absolute;
-  opacity:0;
-  filter:alpha(opacity=0);
-  height: 100px;
-  width: 100px;
-  cursor: pointer;
-
-  z-index: 9;
-}
-/deep/ .el-input__inner{
-  height: 100px;
-  width: 100px;
-}
 </style>
