@@ -5,7 +5,7 @@
         color="primary"
     >
       <v-list-item
-          v-for="(item, i) in listItemInfo"
+          v-for="(item, i) in data"
           :key="i"
           two-line
       >
@@ -85,11 +85,15 @@ export default {
         },
       ]
     }
-  }
+  },
+  props:['data']
 }
 </script>
 
 <style scoped>
+/deep/ .v-list-item{
+  height: 84px;
+}
 .v-list-item__content > *:not(:last-child) {
   font-size: 24px;
   font-weight: 700;

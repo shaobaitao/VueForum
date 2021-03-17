@@ -12,13 +12,12 @@
                 v-if="editInfo.isOwner"
                 class="avatarUploader"
                 drag
-
                 action="http://forum.shaobaitao.cn/forumAPI/uploadAvatar.php"
                 :before-upload="beforeAvatarUpload"
                 multiple>
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+              <div class="el-upload__tip" slot="tip">只能上传jpeg、jpg、png、gif、webp文件，且不超过500kb</div>
             </el-upload>
           </el-form-item>
           <el-form-item label="昵称" prop="nickname">
@@ -135,16 +134,16 @@ export default {
         userID: this.$route.params.id
       })
           .then(res => {
-                    this.editInfo = res.data
+              this.editInfo = res.data
           })
 
     },
     beforeAvatarUpload(file){
-      const isLt2M = file.size / 1024 / 1024 < 1
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 1MB!')
+      const fileSize = file.size / 1024  <= 500  //1MB
+      if (!fileSize) {
+        this.$message.error('上传头像图片大小不能超过 500KB!')
       }
-      return isLt2M
+      return fileSize
     }
   },
   mounted() {
@@ -157,7 +156,7 @@ export default {
 
 <style scoped>
 .userInfoMain {
-  height: 100vh;
+  /*height: 100vh;*/
   width: 50vw;
   margin: 30px auto;
   min-width: 750px;

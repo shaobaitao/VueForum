@@ -20,6 +20,9 @@ let router = new VueRouter({
         },{
             path:'/userInfo/:id',
             component:()=>import("@/views/userInfo.vue")
+        },{
+            path:'/post',
+            component:()=>import("@/views/post.vue")
         }
     ]
 })

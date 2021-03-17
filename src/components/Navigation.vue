@@ -7,7 +7,7 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
-    <el-menu-item index="1">首页</el-menu-item>
+    <el-menu-item index="1" @click="toIndex">首页</el-menu-item>
     <el-menu-item index="2">博客</el-menu-item>
     <el-menu-item index="3">程序员学院</el-menu-item>
     <el-menu-item index="4">下载</el-menu-item>
@@ -39,7 +39,7 @@
             <span slot="title">退出登录</span>
           </el-menu-item>
         </el-menu>
-        <el-avatar :size="40" slot="reference" ></el-avatar>
+        <el-avatar :size="40" slot="reference" :src="avatar"></el-avatar>
       </el-popover>
     </el-menu-item>
 
@@ -67,6 +67,7 @@ export default {
       isLogin: false,
       username: "",
       userID:0,
+      avatar:'',
     };
   },
   methods: {
@@ -78,6 +79,9 @@ export default {
     },
     toSignIn(){
       this.$router.push('/register')
+    },
+    toIndex(){
+      this.$router.push('/')
     },
     logOut(){
       this.$axios.post("forumAPI/logOut.php")
@@ -102,6 +106,7 @@ export default {
               this.username = res.data['msg']
               this.isLogin=res.data['is_login']
               this.userID=res.data['id']
+              this.avatar=res.data['avatar']
             })
 
       })
@@ -124,7 +129,7 @@ export default {
 
 <style scoped>
 .el-menu-demo {
-  min-width: 1100px;
+  min-width: 1200px;
 }
 
 .el-menu-item {
