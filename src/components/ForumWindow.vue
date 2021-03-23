@@ -14,8 +14,8 @@
           <v-list-item-subtitle>
             <div class="listSecondLine">
               <div class="listLineUser">
-                <el-avatar :size="24" slot="reference"></el-avatar>
-                <a style="margin-left: 5px; color: #757575">{{ item.username }}</a>
+                <el-avatar :size="24" slot="reference" :src="item.headPortrait"></el-avatar>
+                <a style="margin-left: 5px; color: #757575">{{ item.nickname }}</a>
               </div>
               <div class="listLineContent">
                 {{ item.content }}

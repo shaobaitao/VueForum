@@ -16,6 +16,9 @@ const api = {
     getUserLoginStatus(data) {
         return axios.post('forumAPI/getUserLoginStatus.php', data).then(res => res)
     },
+    getPostInfo(data) {
+        return axios.post('forumAPI/getPostInfo.php', data).then(res => res)
+    },
 }
 
 export default api;
